@@ -5,27 +5,25 @@ exports.handler = async (event) => {
   const userMessage = body.messages[0].content;
   const apiKey = process.env.ANTHROPIC_API_KEY;
 
-  // Try models in order until one works
-  const models = ['gemini-1.5-flash', 'gemini-1.5-flash-8b', 'gemini-1.0-pro'];
-  
-  let text = '';
-  for (const model of models) {
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ role: 'user', parts: [{ text: userMessage }] }],
-          generationConfig: { temperature: 0.9, maxOutputTokens: 1000 }
-        })
-      }
-    );
-    const data = await response.json();
-    console.log(`${model} response:`, JSON.stringify(data).slice(0, 300));
-    text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-    if (text) break;
-  }
+  const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`,
+      'HTTP-Referer': 'https://moodbeats12.netlify.app',
+      'X-Title': 'MoodBeats'
+    },
+    body: JSON.stringify({
+      model: 'meta-llama/llama-3.3-8b-instruct:free',
+      messages: [{ role: 'user', content: userMessage }],
+      max_tokens: 1000
+    })
+  });
+
+  const data = await response.json();
+  console.log('OpenRouter response:', JSON.stringify(data).slice(0, 500));
+
+  const text = data.choices?.[0]?.message?.content || data.error?.message || '';
 
   return {
     statusCode: 200,
