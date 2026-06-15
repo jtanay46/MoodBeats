@@ -3,7 +3,7 @@ exports.handler = async (event) => {
 
   const body = JSON.parse(event.body);
   const userMessage = body.messages[0].content;
-  const apiKey = process.env.ANTHROPIC_API_KEY; // we'll reuse same env var name
+  const apiKey = process.env.ANTHROPIC_API_KEY;
 
   const response = await fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
@@ -11,17 +11,23 @@ exports.handler = async (event) => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
+        systemInstruction: { parts: [{ text: 'You are a music composition AI. Always respond with a single valid JSON object only. No markdown, no backticks, no explanation — just the raw JSON.' }] },
         contents: [{ parts: [{ text: userMessage }] }],
-        generationConfig: { temperature: 1, maxOutputTokens: 1000 }
+        generationConfig: {
+          temperature: 0.9,
+          maxOutputTokens: 1000,
+          responseMimeType: 'application/json'
+        }
       })
     }
   );
 
   const data = await response.json();
-  console.log('Gemini response:', JSON.stringify(data));
+  console.log('Gemini raw:', JSON.stringify(data));
 
-  // Convert Gemini response format to Anthropic-like format so frontend works unchanged
   const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  console.log('Gemini text:', text);
+
   return {
     statusCode: 200,
     headers: { 'Access-Control-Allow-Origin': '*' },
