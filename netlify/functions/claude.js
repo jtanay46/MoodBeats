@@ -20,10 +20,17 @@ exports.handler = async (event) => {
     })
   });
 
-  const data = await response.json();
-  console.log('OpenRouter response:', JSON.stringify(data).slice(0, 500));
+  const raw = await response.text();
+  console.log('STATUS:', response.status);
+  console.log('RAW BODY:', raw);
 
-  const text = data.choices?.[0]?.message?.content || data.error?.message || '';
+  let text = '';
+  try {
+    const data = JSON.parse(raw);
+    text = data.choices?.[0]?.message?.content || data.error?.message || JSON.stringify(data);
+  } catch(e) {
+    text = raw;
+  }
 
   return {
     statusCode: 200,
