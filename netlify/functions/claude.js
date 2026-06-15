@@ -11,22 +11,22 @@ exports.handler = async (event) => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        systemInstruction: { parts: [{ text: 'You are a music composition AI. Always respond with a single valid JSON object only. No markdown, no backticks, no explanation — just the raw JSON.' }] },
-        contents: [{ parts: [{ text: userMessage }] }],
+        contents: [{ role: 'user', parts: [{ text: userMessage }] }],
         generationConfig: {
           temperature: 0.9,
-          maxOutputTokens: 1000,
-          responseMimeType: 'application/json'
+          maxOutputTokens: 1000
         }
       })
     }
   );
 
   const data = await response.json();
-  console.log('Gemini raw:', JSON.stringify(data));
+  // Log EVERYTHING so we can see what's happening
+  console.log('FULL GEMINI RESPONSE:', JSON.stringify(data));
 
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-  console.log('Gemini text:', text);
+  const text = data.candidates?.[0]?.content?.parts?.[0]?.text || 
+               data.error?.message || 
+               'EMPTY - full data: ' + JSON.stringify(data);
 
   return {
     statusCode: 200,
