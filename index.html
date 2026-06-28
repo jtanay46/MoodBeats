@@ -686,7 +686,7 @@ const LOADING_MSGS = [
   'Weaving the melody...', 'Tuning the instruments...'
 ];
 
-const GEMINI_API_KEY = 'AQ.Ab8RN6KDdCSFaiAw4iboIU0bTbI1-f9TAb8i1Zu-r0wrO-g2-g';
+const GEMINI_API_KEY = 'AQ.Ab8RN6KihGbyJQ8y192SpU3o1ACOXT2RLlpya_IMAczua6PhRA';
 
 async function generateMusic() {
   const mood = document.getElementById('moodInput').value.trim();
@@ -734,10 +734,10 @@ Rules:
 
   for (const model of models) {
     try {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`;
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
       const response = await fetch(url, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + GEMINI_API_KEY },
         body: JSON.stringify({
           contents: [{ role: 'user', parts: [{ text: prompt }] }],
           generationConfig: {
