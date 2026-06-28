@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MoodBeats — Music from your mood</title>
+<title>MoodBeats</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%B5%3C/text%3E%3C/svg%3E">
 <style>
   :root {
     --bg: #0a0a0f;
@@ -31,7 +32,6 @@
     overflow-x: hidden;
   }
 
-  /* Ambient glow bg */
   body::before {
     content: '';
     position: fixed;
@@ -46,7 +46,6 @@
 
   .app { position: relative; z-index: 1; max-width: 740px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
 
-  /* Header */
   .header { text-align: center; margin-bottom: 3rem; }
   .logo { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 1.5rem; }
   .logo-icon {
@@ -59,7 +58,6 @@
   .logo-text span { color: var(--purple3); }
   .tagline { color: var(--text2); font-size: 15px; }
 
-  /* Mood input */
   .mood-section { margin-bottom: 2rem; }
   .section-label {
     font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
@@ -85,7 +83,6 @@
   .mood-input:focus { border-color: var(--purple2); }
   .mood-input::placeholder { color: var(--text3); }
 
-  /* Quick mood pills */
   .mood-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 0.75rem; }
   .pill {
     padding: 6px 14px;
@@ -101,7 +98,6 @@
   .pill:hover { border-color: var(--purple2); color: var(--purple3); background: rgba(124,92,191,0.1); }
   .pill.active { border-color: var(--purple2); color: var(--purple3); background: rgba(124,92,191,0.15); }
 
-  /* Controls row */
   .controls-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 1.5rem; }
   .control-group { }
   .control-select {
@@ -123,7 +119,6 @@
   }
   .control-select:focus { border-color: var(--purple2); }
 
-  /* Generate button */
   .generate-btn {
     width: 100%;
     padding: 1rem;
@@ -147,7 +142,6 @@
   .generate-btn:active { transform: translateY(0); }
   .generate-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-  /* Player section */
   .player-section {
     background: var(--bg2);
     border: 1px solid var(--border2);
@@ -157,7 +151,6 @@
   }
   .player-section.visible { display: block; }
 
-  /* Waveform */
   .waveform-wrap {
     background: var(--bg3);
     border-radius: 12px;
@@ -169,12 +162,10 @@
   }
   #waveform-canvas { width: 100%; height: 100%; display: block; }
 
-  /* Track info */
   .track-info { margin-bottom: 1.25rem; }
   .track-title { font-size: 17px; font-weight: 600; margin-bottom: 4px; }
   .track-meta { font-size: 13px; color: var(--text2); }
 
-  /* Player controls */
   .player-controls { display: flex; align-items: center; gap: 16px; margin-bottom: 1.25rem; }
   .play-btn {
     width: 48px; height: 48px;
@@ -201,7 +192,6 @@
   .time-row { display: flex; justify-content: space-between; margin-top: 4px; }
   .time-txt { font-size: 11px; color: var(--text3); }
 
-  /* Chord display */
   .chord-section { margin-bottom: 1.25rem; }
   .chords-wrap { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 0.5rem; }
   .chord-pill {
@@ -222,7 +212,6 @@
     color: var(--text2);
   }
 
-  /* Mood analysis */
   .mood-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 0.5rem; }
   .mood-tag {
     padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 500;
@@ -231,7 +220,6 @@
   .mood-tag.valence { background: rgba(45,212,160,0.12); color: #2dd4a0; border: 1px solid rgba(45,212,160,0.3); }
   .mood-tag.tempo { background: rgba(212,85,128,0.12); color: #e87da8; border: 1px solid rgba(212,85,128,0.3); }
 
-  /* Download + share row */
   .action-row { display: flex; gap: 10px; margin-top: 1.25rem; }
   .action-btn {
     flex: 1; padding: 0.7rem; border-radius: 10px;
@@ -246,7 +234,6 @@
   }
   .action-btn:hover { border-color: var(--purple2); color: var(--purple3); background: rgba(124,92,191,0.08); }
 
-  /* Description card */
   .description-card {
     background: var(--bg3);
     border-radius: 12px;
@@ -260,7 +247,6 @@
   }
   .description-card.visible { display: block; }
 
-  /* Loading state */
   .loading-wrap { text-align: center; padding: 2rem 0; display: none; }
   .loading-wrap.visible { display: block; }
   .spinner {
@@ -274,7 +260,6 @@
   @keyframes spin { to { transform: rotate(360deg); } }
   .loading-txt { color: var(--text2); font-size: 14px; }
 
-  /* Error */
   .error-card {
     background: rgba(226,75,74,0.1);
     border: 1px solid rgba(226,75,74,0.3);
@@ -287,7 +272,6 @@
   }
   .error-card.visible { display: block; }
 
-  /* Bars animation on waveform */
   @keyframes barPulse {
     0%,100% { transform: scaleY(0.3); }
     50% { transform: scaleY(1); }
@@ -302,16 +286,14 @@
 <body>
 <div class="app">
 
-  <!-- Header -->
   <div class="header">
     <div class="logo">
       <div class="logo-icon">🎵</div>
       <div class="logo-text">Mood<span>Beats</span></div>
     </div>
-    <p class="tagline">Describe how you feel — get a song that matches.</p>
+    <p class="tagline">Describe how you feel and get a song that matches</p>
   </div>
 
-  <!-- Mood Input -->
   <div class="mood-section">
     <div class="section-label">How are you feeling?</div>
     <div class="mood-input-wrap">
@@ -332,7 +314,6 @@
     </div>
   </div>
 
-  <!-- Controls -->
   <div class="controls-row">
     <div class="control-group">
       <div class="section-label">Genre</div>
@@ -366,30 +347,26 @@
     </div>
   </div>
 
-  <!-- Error -->
   <div class="error-card" id="errorCard"></div>
 
-  <!-- Generate Button -->
   <button class="generate-btn" id="generateBtn" onclick="generateMusic()">
     <span id="btnIcon">✨</span>
     <span id="btnText">Generate my track</span>
   </button>
 
-  <!-- Loading -->
   <div class="loading-wrap" id="loadingWrap">
     <div class="spinner"></div>
     <div class="loading-txt" id="loadingTxt">Reading your mood...</div>
   </div>
 
-  <!-- Player -->
   <div class="player-section" id="playerSection">
     <div class="waveform-wrap">
       <canvas id="waveform-canvas"></canvas>
     </div>
 
     <div class="track-info">
-      <div class="track-title" id="trackTitle">—</div>
-      <div class="track-meta" id="trackMeta">—</div>
+      <div class="track-title" id="trackTitle"></div>
+      <div class="track-meta" id="trackMeta"></div>
     </div>
 
     <div class="player-controls">
@@ -427,7 +404,6 @@
 </div>
 
 <script>
-// ─── Audio Engine ────────────────────────────────────────────────────────────
 let audioCtx = null;
 let isPlaying = false;
 let scheduledNodes = [];
@@ -447,7 +423,6 @@ function getAudioCtx() {
   return audioCtx;
 }
 
-// ─── Waveform Canvas ─────────────────────────────────────────────────────────
 let waveformBars = [];
 let waveAnimId = null;
 
@@ -496,7 +471,6 @@ function startWaveAnim() {
   loop();
 }
 
-// ─── Note / Chord helpers ─────────────────────────────────────────────────────
 const NOTE_FREQS = {
   'C3':130.81,'D3':146.83,'E3':164.81,'F3':174.61,'G3':196,'A3':220,'B3':246.94,
   'C4':261.63,'D4':293.66,'E4':329.63,'F4':349.23,'G4':392,'A4':440,'B4':493.88,
@@ -564,7 +538,7 @@ function playChord(ctx, freqs, startTime, duration, instrument, gainVal = 0.18) 
       osc.connect(filt); filt.connect(g); g.connect(masterGain);
       osc.start(startTime); osc.stop(startTime + duration);
       scheduledNodes.push(osc);
-    } else { // guitar
+    } else {
       const osc = ctx.createOscillator();
       const g = ctx.createGain();
       osc.type = 'triangle';
@@ -615,7 +589,6 @@ function schedulePlayback(chordProg, melodyNotes, tempo, instrument) {
   chordProg.forEach((chord, i) => {
     const t = now + i * chordDur;
     playChord(ctx, chordFreqs(chord), t, chordDur, instrument);
-    // simple drum on beats 1 and 3
     if (tempo > 70) {
       addBassDrum(ctx, t);
       addBassDrum(ctx, t + secPerBeat * 2);
@@ -700,7 +673,6 @@ function seekTrack(e) {
   const rect = document.getElementById('progressBg').getBoundingClientRect();
   const prog = (e.clientX - rect.left) / rect.width;
   if (isPlaying) stopPlayback();
-  // Restart from new position (simplified: just restart)
   togglePlay();
 }
 
@@ -709,11 +681,12 @@ function formatTime(s) {
   return m + ':' + (sec < 10 ? '0' : '') + sec;
 }
 
-// ─── AI Generation ────────────────────────────────────────────────────────────
 const LOADING_MSGS = [
   'Reading your mood...', 'Composing chord progression...',
   'Weaving the melody...', 'Tuning the instruments...'
 ];
+
+const GEMINI_API_KEY = 'AQ.Ab8RN6KDdCSFaiAw4iboIU0bTbI1-f9TAb8i1Zu-r0wrO-g2-g';
 
 async function generateMusic() {
   const mood = document.getElementById('moodInput').value.trim();
@@ -727,179 +700,86 @@ async function generateMusic() {
 
   const msgs = ['Reading your mood...','Composing chord progression...','Weaving the melody...','Tuning the instruments...'];
   let mi = 0;
-  const msgTimer = setInterval(() => { mi=(mi+1)%msgs.length; document.getElementById('loadingTxt').textContent=msgs[mi]; }, 900);
+  document.getElementById('loadingTxt').textContent = msgs[0];
+  const msgTimer = setInterval(() => { mi=(mi+1)%msgs.length; document.getElementById('loadingTxt').textContent=msgs[mi]; }, 1600);
 
-  // Simulate thinking time
-  await new Promise(r => setTimeout(r, 2800));
-  clearInterval(msgTimer);
-  document.getElementById('loadingWrap').classList.remove('visible');
-  document.getElementById('generateBtn').disabled = false;
+  const genre = document.getElementById('genreSelect').value;
+  const tempo = document.getElementById('tempoSelect').value;
+  const instrument = document.getElementById('instrumentSelect').value;
 
-  const result = analyzeMood(mood);
-  applyTrack(result);
-}
+  const prompt = `You are a music composition AI. Return ONLY a JSON object, no explanation, no markdown.
 
-function analyzeMood(text) {
-  const t = text.toLowerCase();
+User mood: "${mood}"
+Genre: ${genre}, Tempo: ${tempo}, Instrument: ${instrument}
 
-  // Keyword scoring for emotional dimensions
-  const scores = {
-    happy: 0, sad: 0, angry: 0, anxious: 0, calm: 0,
-    romantic: 0, energetic: 0, nostalgic: 0, dark: 0, hopeful: 0
-  };
+Return this exact JSON structure:
+{"title":"evocative 4-6 word track title","chords":["C","Am","F","G","C","Am","F","G"],"bpm":90,"key":"C major","melody":[{"note":"E4","beat":0,"dur":1},{"note":"G4","beat":1,"dur":0.5},{"note":"A4","beat":1.5,"dur":0.5},{"note":"G4","beat":2,"dur":2}],"energy":"medium","valence":"hopeful","description":"Two sentences describing the mood and sound."}
 
-  const keywords = {
-    happy:    ['happy','joy','excited','great','amazing','laugh','smile','fun','celebrate','ecstatic','euphoric','elated','bliss','wonderful','fantastic','thrilled','giddy','love','good'],
-    sad:      ['sad','cry','tears','miss','loss','grief','lonely','heartbreak','depressed','empty','hurt','pain','crying','miserable','devastated','broken','mourn','alone'],
-    angry:    ['angry','mad','furious','rage','hate','frustrat','annoyed','pissed','livid','resentful','bitter','rebel','fight','bold','break','rules'],
-    anxious:  ['anxious','nervous','worry','stress','panic','overwhelm','racing','restless','tense','scared','fear','dread','uneasy','shaky','unsettled'],
-    calm:     ['calm','peaceful','relax','serene','still','quiet','gentle','sooth','tranquil','meditat','breath','float','slow','easy','content'],
-    romantic: ['love','romantic','heart','tender','warm','intimate','passion','affection','crush','longing','adore','sweet','soft','beautiful','miss you'],
-    energetic:['energy','pump','run','fast','power','strong','unstoppable','fire','hype','go','rush','loud','intense','drive','push'],
-    nostalgic:['nostalg','memory','remember','past','used to','childhood','old','simpler','miss','before','back when','throwback','vintage','classic'],
-    dark:     ['dark','night','shadow','void','numb','hollow','fog','lost','disappear','silent','cold','grey','black','nothing','heavy'],
-    hopeful:  ['hope','better','soon','change','new','beginning','looking forward','dawn','light','believe','someday','going to','dream','future','optimist']
-  };
+Rules:
+- chords: exactly 8 chords from: C Am F G Dm Em Bm E A D Gm Bb Fm Cm Ab Db
+- bpm: integer 55-145 matching mood and tempo preference
+- melody: 8-12 notes, beat 0-31, dur 0.25-4, notes like E4 G4 A4 C5 (C3-C5 range only)
+- energy: low medium or high
+- valence: dark bittersweet neutral hopeful or joyful
+- Make it musically match the user's mood`;
 
-  for (const [emotion, words] of Object.entries(keywords)) {
-    for (const w of words) {
-      if (t.includes(w)) scores[emotion] += 1;
+  const models = [
+    'gemini-2.0-flash',
+    'gemini-2.0-flash-lite',
+    'gemini-1.5-flash',
+    'gemini-1.5-flash-8b'
+  ];
+
+  let lastError = '';
+
+  for (const model of models) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`;
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ role: 'user', parts: [{ text: prompt }] }],
+          generationConfig: {
+            temperature: 1.0,
+            maxOutputTokens: 800,
+            responseMimeType: 'application/json'
+          }
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.error) {
+        lastError = data.error.message || 'API error';
+        console.log(`[${model}] error:`, lastError);
+        continue;
+      }
+
+      const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      if (!text) { lastError = 'Empty response'; console.log(`[${model}] empty`); continue; }
+
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) { lastError = 'No JSON'; continue; }
+      const result = JSON.parse(jsonMatch[0]);
+
+      console.log(`[${model}] SUCCESS`);
+      clearInterval(msgTimer);
+      document.getElementById('loadingWrap').classList.remove('visible');
+      document.getElementById('generateBtn').disabled = false;
+      applyTrack(result);
+      return;
+
+    } catch(err) {
+      lastError = err.message;
+      console.log(`[${model}] exception:`, err.message);
     }
   }
 
-  // Find dominant emotion
-  const dominant = Object.entries(scores).sort((a,b)=>b[1]-a[1])[0][0];
-
-  const tempoPrefs = { slow: 0.7, medium: 1.0, fast: 1.3 };
-  const tempoMult = tempoPrefs[document.getElementById('tempoSelect').value] || 1.0;
-
-  // Mood profiles
-  const profiles = {
-    happy: {
-      chordSets: [['C','G','Am','F','C','G','F','C'],['G','D','Em','C','G','D','C','G'],['F','C','Bb','C','F','C','Dm','C']],
-      bpmBase: 118, energy: 'high', valence: 'joyful',
-      melodyTemplates: [
-        [{note:'E4',beat:0,dur:0.5},{note:'G4',beat:0.5,dur:0.5},{note:'A4',beat:1,dur:1},{note:'G4',beat:2,dur:0.5},{note:'E4',beat:2.5,dur:0.5},{note:'C4',beat:3,dur:1},{note:'D4',beat:4,dur:0.5},{note:'E4',beat:4.5,dur:0.5},{note:'G4',beat:5,dur:2}],
-        [{note:'C5',beat:0,dur:0.5},{note:'B4',beat:0.5,dur:0.5},{note:'A4',beat:1,dur:1},{note:'G4',beat:2,dur:1},{note:'A4',beat:3,dur:1},{note:'C5',beat:4,dur:2}]
-      ],
-      titles: ['Sunlit Morning Rush','Golden Hour Feeling','Infinite Brightness','The Best Day Yet','Chasing Summer Light'],
-      descriptions: ['A bright, uplifting track bursting with warmth and forward momentum. The melody dances freely over open chords, capturing that rare feeling when everything just clicks.','Radiant and full of life, this piece channels pure joy into sound. Bright chord voicings and a bouncy rhythm keep the energy soaring.']
-    },
-    sad: {
-      chordSets: [['Am','F','C','G','Am','F','G','Am'],['Dm','Am','Bb','C','Dm','Am','Gm','Dm'],['Em','C','G','D','Em','C','Am','B']],
-      bpmBase: 68, energy: 'low', valence: 'bittersweet',
-      melodyTemplates: [
-        [{note:'A4',beat:0,dur:1},{note:'G4',beat:1,dur:1},{note:'E4',beat:2,dur:2},{note:'F4',beat:4,dur:1},{note:'E4',beat:5,dur:1},{note:'D4',beat:6,dur:2}],
-        [{note:'E4',beat:0,dur:2},{note:'D4',beat:2,dur:1},{note:'C4',beat:3,dur:1},{note:'D4',beat:4,dur:4}]
-      ],
-      titles: ['Rain on Empty Streets','What We Left Behind','Fading Photographs','The Space You Left','Quiet Ache'],
-      descriptions: ['A melancholic piece that sits with the weight of missing something — or someone. Minor harmonies drift through the air like distant memories refusing to let go.','Tender and aching, this track finds beauty in sadness. The melody moves slowly, as if reluctant to leave each moment behind.']
-    },
-    angry: {
-      chordSets: [['Dm','Gm','Bb','C','Dm','Gm','A','Dm'],['Em','Am','D','G','Em','Am','B','Em'],['Cm','Fm','Ab','Bb','Cm','Fm','G','Cm']],
-      bpmBase: 138, energy: 'high', valence: 'dark',
-      melodyTemplates: [
-        [{note:'D4',beat:0,dur:0.25},{note:'E4',beat:0.25,dur:0.25},{note:'F4',beat:0.5,dur:0.5},{note:'A4',beat:1,dur:0.5},{note:'G4',beat:1.5,dur:0.5},{note:'F4',beat:2,dur:1},{note:'E4',beat:3,dur:1},{note:'D4',beat:4,dur:2}],
-      ],
-      titles: ['Breaking Point','Storm Front','Tear It All Down','Unfiltered Fury','No More Holding Back'],
-      descriptions: ['Raw and relentless, this track doesn\'t flinch. Driving rhythms and sharp harmonic tension mirror the feeling of reaching your absolute limit.','Explosive energy compressed into sound. The progression pushes forward without apology, matching the fire behind these emotions.']
-    },
-    anxious: {
-      chordSets: [['Am','Dm','G','C','Am','Dm','E','Am'],['Em','Bm','C','G','Em','Am','D','Em'],['Dm','Am','Gm','Bb','Dm','Am','C','Dm']],
-      bpmBase: 105, energy: 'medium', valence: 'dark',
-      melodyTemplates: [
-        [{note:'A4',beat:0,dur:0.25},{note:'B4',beat:0.25,dur:0.25},{note:'A4',beat:0.5,dur:0.25},{note:'G4',beat:0.75,dur:0.25},{note:'A4',beat:1,dur:0.5},{note:'E4',beat:1.5,dur:0.5},{note:'F4',beat:2,dur:1},{note:'E4',beat:3,dur:1},{note:'A4',beat:4,dur:2}],
-      ],
-      titles: ['Racing Thoughts at 2AM','Static in the Signal','Spiral Descent','The Unsettled Mind','Running in Circles'],
-      descriptions: ['Restless and searching, this track mirrors a mind that won\'t quiet down. The rhythm pulses unevenly, notes circling back on themselves like thoughts that refuse to resolve.','Tense harmonies and a relentless pace capture that feeling of being unable to slow down, even when you want to.']
-    },
-    calm: {
-      chordSets: [['C','Am','F','G','C','Am','Dm','G'],['G','Em','C','D','G','Em','Am','D'],['F','C','Dm','Am','Bb','F','C','F']],
-      bpmBase: 72, energy: 'low', valence: 'hopeful',
-      melodyTemplates: [
-        [{note:'G4',beat:0,dur:2},{note:'E4',beat:2,dur:2},{note:'F4',beat:4,dur:2},{note:'D4',beat:6,dur:2},{note:'E4',beat:8,dur:4}],
-        [{note:'C4',beat:0,dur:1},{note:'E4',beat:1,dur:1},{note:'G4',beat:2,dur:2},{note:'F4',beat:4,dur:1},{note:'E4',beat:5,dur:3}]
-      ],
-      titles: ['Still Waters','Breathing Room','Sunday Afternoon Light','Drift','The Quiet Between'],
-      descriptions: ['A serene, unhurried piece that creates space to simply exist. Gentle chord transitions and a soft melody invite the mind to slow down and settle.','Like a long exhale, this track dissolves tension with each passing bar. Warm harmonics wrap around you like something familiar and safe.']
-    },
-    romantic: {
-      chordSets: [['C','Em','Am','F','C','G','Am','F'],['F','Am','Dm','C','Bb','F','C','F'],['G','Bm','Em','C','G','D','Am','D']],
-      bpmBase: 82, energy: 'medium', valence: 'hopeful',
-      melodyTemplates: [
-        [{note:'E4',beat:0,dur:1},{note:'G4',beat:1,dur:1},{note:'A4',beat:2,dur:2},{note:'G4',beat:4,dur:1},{note:'F4',beat:5,dur:1},{note:'E4',beat:6,dur:2}],
-        [{note:'B4',beat:0,dur:2},{note:'A4',beat:2,dur:1},{note:'G4',beat:3,dur:1},{note:'A4',beat:4,dur:2},{note:'G4',beat:6,dur:2}]
-      ],
-      titles: ['Warmth in Your Orbit','Tender Hours','Something Unspoken','Close Enough to Feel','Soft Landing'],
-      descriptions: ['Intimate and gentle, this piece captures the quiet electricity of closeness. The melody leans into each chord like a whispered confession.','Warm and unhurried, this track holds space for tenderness. Each note lingers just long enough to feel like a hand not quite letting go.']
-    },
-    energetic: {
-      chordSets: [['G','D','Em','C','G','D','C','G'],['A','E','D','A','E','D','E','A'],['C','G','F','G','C','Am','F','G']],
-      bpmBase: 132, energy: 'high', valence: 'joyful',
-      melodyTemplates: [
-        [{note:'G4',beat:0,dur:0.25},{note:'A4',beat:0.25,dur:0.25},{note:'B4',beat:0.5,dur:0.5},{note:'D5',beat:1,dur:0.5},{note:'B4',beat:1.5,dur:0.5},{note:'A4',beat:2,dur:0.5},{note:'G4',beat:2.5,dur:0.5},{note:'D4',beat:3,dur:1},{note:'G4',beat:4,dur:2}],
-      ],
-      titles: ['Full Send','Velocity','Unstoppable Force','Maximum Output','Zero to Everything'],
-      descriptions: ['Pure kinetic energy in audio form. This track doesn\'t build up — it starts at full power and dares you to keep up. Fast tempos and driving rhythms for when you need to move.','Built for momentum. Every element of this piece pushes forward — the rhythm relentless, the melody sharp and purposeful.']
-    },
-    nostalgic: {
-      chordSets: [['C','Am','F','G','C','Am','Dm','G'],['G','Em','Am','D','G','C','D','G'],['F','Dm','Bb','C','F','Dm','Gm','C']],
-      bpmBase: 78, energy: 'low', valence: 'bittersweet',
-      melodyTemplates: [
-        [{note:'E4',beat:0,dur:1},{note:'D4',beat:1,dur:1},{note:'C4',beat:2,dur:2},{note:'D4',beat:4,dur:1},{note:'E4',beat:5,dur:1},{note:'G4',beat:6,dur:2},{note:'E4',beat:8,dur:4}],
-      ],
-      titles: ['Summer We Can\'t Return To','Old Photographs','The Long Way Home','When Time Was Slower','A Road I Used to Know'],
-      descriptions: ['Warm and aching, this piece sounds like flipping through old photographs. The melody carries that particular sweetness of remembering something wonderful that can\'t come back.','There\'s a golden haze to this track — familiar chord shapes drifting through gentle tempos, the way a good memory replays in your mind unbidden.']
-    },
-    dark: {
-      chordSets: [['Am','Dm','Gm','Am','F','E','Am','E'],['Em','Am','B','Em','C','D','B','Em'],['Cm','Fm','Bb','Cm','Ab','G','Cm','G']],
-      bpmBase: 60, energy: 'low', valence: 'dark',
-      melodyTemplates: [
-        [{note:'A3',beat:0,dur:2},{note:'G3',beat:2,dur:1},{note:'F3',beat:3,dur:1},{note:'E3',beat:4,dur:4},{note:'A3',beat:8,dur:4}],
-        [{note:'E4',beat:0,dur:3},{note:'D4',beat:3,dur:1},{note:'C4',beat:4,dur:2},{note:'B3',beat:6,dur:2}]
-      ],
-      titles: ['Into the Void','Hollow Hours','The Weight of Nothing','Numb','Descent'],
-      descriptions: ['Sparse and heavy, this piece doesn\'t try to fill the silence — it leans into it. Dark harmonics and a slow pulse mirror the feeling of carrying something too heavy to name.','An introspective descent into shadow. Minor tonalities and deliberate pacing create a sound that feels like the inside of a very quiet, very heavy moment.']
-    },
-    hopeful: {
-      chordSets: [['C','G','Am','F','C','G','F','C'],['F','C','G','Am','F','C','Dm','G'],['G','D','Em','C','G','D','Am','C']],
-      bpmBase: 92, energy: 'medium', valence: 'hopeful',
-      melodyTemplates: [
-        [{note:'C4',beat:0,dur:1},{note:'E4',beat:1,dur:1},{note:'G4',beat:2,dur:1},{note:'A4',beat:3,dur:1},{note:'G4',beat:4,dur:1},{note:'E4',beat:5,dur:1},{note:'F4',beat:6,dur:2},{note:'G4',beat:8,dur:4}],
-        [{note:'G4',beat:0,dur:2},{note:'A4',beat:2,dur:1},{note:'B4',beat:3,dur:1},{note:'C5',beat:4,dur:4}]
-      ],
-      titles: ['Something Better Coming','First Light','The Turn','On the Edge of New','Almost There'],
-      descriptions: ['Quietly optimistic, this track feels like the moment before something good happens. The melody climbs steadily, each chord change like a step toward something you can almost see.','There\'s a warmth to this piece that doesn\'t shout — it simply persists. Like hope itself, it keeps moving forward even when the path isn\'t fully clear yet.']
-    }
-  };
-
-  const profile = profiles[dominant] || profiles['calm'];
-  const genreSel = document.getElementById('genreSelect').value;
-  const tempoSelect = document.getElementById('tempoSelect').value;
-
-  // Pick random variants for replayability
-  const chords = profile.chordSets[Math.floor(Math.random() * profile.chordSets.length)];
-  const melody = profile.melodyTemplates[Math.floor(Math.random() * profile.melodyTemplates.length)];
-  const title = profile.titles[Math.floor(Math.random() * profile.titles.length)];
-  const description = profile.descriptions[Math.floor(Math.random() * profile.descriptions.length)];
-
-  // Adjust BPM by tempo preference
-  const tempoMults = { slow: 0.72, medium: 1.0, fast: 1.35 };
-  const bpm = Math.round(profile.bpmBase * (tempoMults[tempoSelect] || 1.0));
-
-  // Key from genre
-  const keyMap = { 'lo-fi':'C major','cinematic':'D minor','electronic':'A minor','jazz':'F major','ambient':'G major','indie pop':'E major','classical':'C major' };
-
-  return {
-    title,
-    chords,
-    bpm,
-    key: keyMap[genreSel] || 'C major',
-    melody,
-    energy: profile.energy,
-    valence: profile.valence,
-    description
-  };
+  clearInterval(msgTimer);
+  document.getElementById('loadingWrap').classList.remove('visible');
+  document.getElementById('generateBtn').disabled = false;
+  showError('AI generation failed: ' + lastError + '. Try again in a moment.');
 }
 
 function applyTrack(result) {
@@ -913,13 +793,11 @@ function applyTrack(result) {
   document.getElementById('trackMeta').textContent =
     `${result.key || 'Unknown key'} · ${bpm} BPM · ${document.getElementById('genreSelect').value}`;
 
-  // Chord pills
   const cw = document.getElementById('chordsWrap');
   cw.innerHTML = chords.map((c,i) =>
     `<div class="chord-pill inactive-chord" id="cp${i}">${c}</div>`
   ).join('');
 
-  // Mood tags
   const energy = result.energy || 'medium';
   const valence = result.valence || 'neutral';
   const tempoLabel = bpm < 80 ? 'Slow' : bpm < 110 ? 'Mid-tempo' : 'Fast';
@@ -929,14 +807,12 @@ function applyTrack(result) {
     <span class="mood-tag tempo">♩ ${tempoLabel} · ${bpm} BPM</span>
   `;
 
-  // Description
   if (trackDescription) {
     const dc = document.getElementById('descCard');
     dc.textContent = trackDescription;
     dc.classList.add('visible');
   }
 
-  // Build MIDI data (simplified representation for download)
   buildMidiBlob(chords, noteSequence, bpm);
 
   initWaveform();
@@ -944,11 +820,9 @@ function applyTrack(result) {
   drawWaveform(0);
   currentChordIndex = -1;
 
-  // Auto-play
   setTimeout(() => togglePlay(), 200);
 }
 
-// ─── MIDI-like download (ABC notation as text file) ───────────────────────────
 function buildMidiBlob(chords, melody, bpm) {
   const lines = [
     `X:1`, `T:${trackTitle}`, `M:4/4`, `L:1/4`,
@@ -969,7 +843,7 @@ function downloadMidi() {
 }
 
 function copyDescription() {
-  const txt = `${trackTitle}\n${trackDescription}\nChords: ${chords.join(' – ')}\nBPM: ${bpm}`;
+  const txt = `${trackTitle}\n${trackDescription}\nChords: ${chords.join(', ')}\nBPM: ${bpm}`;
   navigator.clipboard.writeText(txt).then(() => {
     const btn = event.target;
     const orig = btn.textContent;
@@ -998,7 +872,6 @@ function hideError() {
   document.getElementById('errorCard').classList.remove('visible');
 }
 
-// Init
 initWaveform();
 drawWaveform(0);
 </script>
