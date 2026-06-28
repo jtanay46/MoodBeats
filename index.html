@@ -776,10 +776,82 @@ Rules:
     }
   }
 
+  console.log('AI unavailable, using local engine. Last:', lastError);
+  const result = composeLocally(mood, genre, tempo, instrument);
   clearInterval(msgTimer);
   document.getElementById('loadingWrap').classList.remove('visible');
   document.getElementById('generateBtn').disabled = false;
-  showError('AI generation failed: ' + lastError + '. Try again in a moment.');
+  applyTrack(result);
+}
+
+function composeLocally(text, genre, tempo, instrument) {
+  const t = text.toLowerCase();
+  const scores = { happy:0, sad:0, angry:0, anxious:0, calm:0, romantic:0, energetic:0, nostalgic:0, dark:0, hopeful:0 };
+  const kw = {
+    happy:['happy','joy','excited','great','amazing','laugh','smile','fun','celebrate','ecstatic','euphoric','elated','bliss','wonderful','thrilled','giddy','good','sunshine'],
+    sad:['sad','cry','tears','miss','loss','grief','lonely','heartbreak','depressed','empty','hurt','pain','crying','miserable','broken','mourn','alone','down'],
+    angry:['angry','mad','furious','rage','hate','frustrat','annoyed','pissed','livid','bitter','rebel','fight','bold','rules','done'],
+    anxious:['anxious','nervous','worry','stress','panic','overwhelm','racing','restless','tense','scared','fear','dread','uneasy','shaky'],
+    calm:['calm','peaceful','relax','serene','still','quiet','gentle','sooth','tranquil','meditat','breath','float','easy','content','rest'],
+    romantic:['love','romantic','heart','tender','warm','intimate','passion','affection','crush','longing','adore','sweet','soft'],
+    energetic:['energy','pump','run','fast','power','strong','unstoppable','fire','hype','rush','loud','intense','drive','push','alive'],
+    nostalgic:['nostalg','memory','remember','past','childhood','old','simpler','before','throwback','vintage','younger','used to'],
+    dark:['dark','night','shadow','void','numb','hollow','fog','lost','silent','cold','grey','black','nothing','heavy'],
+    hopeful:['hope','better','soon','change','new','beginning','dawn','light','believe','someday','dream','future','optimist','rise']
+  };
+  for (const [e,words] of Object.entries(kw)) for (const w of words) if (t.includes(w)) scores[e]++;
+  let dom = 'calm', max = -1;
+  for (const [e,s] of Object.entries(scores)) if (s > max) { max = s; dom = e; }
+
+  const P = {
+    happy:{ sets:[['C','G','Am','F','C','G','F','C'],['G','D','Em','C','G','D','C','G'],['F','C','Dm','C','F','C','Bb','C']], bpm:118, energy:'high', valence:'joyful',
+      mel:[[{note:'E4',beat:0,dur:0.5},{note:'G4',beat:0.5,dur:0.5},{note:'A4',beat:1,dur:1},{note:'G4',beat:2,dur:0.5},{note:'E4',beat:2.5,dur:0.5},{note:'C4',beat:3,dur:1},{note:'D4',beat:4,dur:0.5},{note:'E4',beat:4.5,dur:0.5},{note:'G4',beat:5,dur:2}],[{note:'C5',beat:0,dur:0.5},{note:'B4',beat:0.5,dur:0.5},{note:'A4',beat:1,dur:1},{note:'G4',beat:2,dur:1},{note:'A4',beat:3,dur:1},{note:'C5',beat:4,dur:2}]],
+      titles:['Sunlit Morning Rush','Golden Hour Feeling','The Best Day Yet','Chasing Summer Light','Wide Open Sky'],
+      desc:['A bright, uplifting track full of warmth and momentum. The melody dances over open chords, that rare feeling when everything clicks.','Radiant and full of life, channeling pure joy into sound with bouncy rhythm and bright voicings.'] },
+    sad:{ sets:[['Am','F','C','G','Am','F','G','Am'],['Dm','Am','Bb','C','Dm','Am','Gm','Dm'],['Em','C','G','D','Em','C','Am','Em']], bpm:68, energy:'low', valence:'bittersweet',
+      mel:[[{note:'A4',beat:0,dur:1},{note:'G4',beat:1,dur:1},{note:'E4',beat:2,dur:2},{note:'F4',beat:4,dur:1},{note:'E4',beat:5,dur:1},{note:'D4',beat:6,dur:2}],[{note:'E4',beat:0,dur:2},{note:'D4',beat:2,dur:1},{note:'C4',beat:3,dur:1},{note:'D4',beat:4,dur:4}]],
+      titles:['Rain on Empty Streets','What We Left Behind','The Space You Left','Quiet Ache','Fading Light'],
+      desc:['A melancholic piece sitting with the weight of missing someone. Minor harmonies drift like memories that refuse to let go.','Tender and aching, finding beauty in sadness. The melody moves slowly, reluctant to leave each moment.'] },
+    angry:{ sets:[['Dm','Gm','Bb','C','Dm','Gm','A','Dm'],['Em','Am','D','G','Em','Am','B','Em'],['Cm','Fm','Ab','Bb','Cm','Fm','G','Cm']], bpm:138, energy:'high', valence:'dark',
+      mel:[[{note:'D4',beat:0,dur:0.25},{note:'E4',beat:0.25,dur:0.25},{note:'F4',beat:0.5,dur:0.5},{note:'A4',beat:1,dur:0.5},{note:'G4',beat:1.5,dur:0.5},{note:'F4',beat:2,dur:1},{note:'E4',beat:3,dur:1},{note:'D4',beat:4,dur:2}]],
+      titles:['Breaking Point','Storm Front','Tear It All Down','No More Holding Back','Burn It Down'],
+      desc:['Raw and relentless, this track does not flinch. Driving rhythms and sharp tension mirror reaching your limit.','Explosive energy compressed into sound, pushing forward without apology.'] },
+    anxious:{ sets:[['Am','Dm','G','C','Am','Dm','E','Am'],['Em','Bm','C','G','Em','Am','D','Em'],['Dm','Am','Gm','Bb','Dm','Am','C','Dm']], bpm:106, energy:'medium', valence:'dark',
+      mel:[[{note:'A4',beat:0,dur:0.25},{note:'B4',beat:0.25,dur:0.25},{note:'A4',beat:0.5,dur:0.25},{note:'G4',beat:0.75,dur:0.25},{note:'A4',beat:1,dur:0.5},{note:'E4',beat:1.5,dur:0.5},{note:'F4',beat:2,dur:1},{note:'E4',beat:3,dur:1},{note:'A4',beat:4,dur:2}]],
+      titles:['Racing Thoughts at 2AM','Static in the Signal','The Unsettled Mind','Running in Circles','Cannot Slow Down'],
+      desc:['Restless and searching, mirroring a mind that will not quiet. The rhythm pulses unevenly, notes circling back.','Tense harmonies and a relentless pace capture being unable to slow down even when you want to.'] },
+    calm:{ sets:[['C','Am','F','G','C','Am','Dm','G'],['G','Em','C','D','G','Em','Am','D'],['F','C','Dm','Am','Bb','F','C','F']], bpm:72, energy:'low', valence:'hopeful',
+      mel:[[{note:'G4',beat:0,dur:2},{note:'E4',beat:2,dur:2},{note:'F4',beat:4,dur:2},{note:'D4',beat:6,dur:2},{note:'E4',beat:8,dur:4}],[{note:'C4',beat:0,dur:1},{note:'E4',beat:1,dur:1},{note:'G4',beat:2,dur:2},{note:'F4',beat:4,dur:1},{note:'E4',beat:5,dur:3}]],
+      titles:['Still Waters','Breathing Room','Sunday Afternoon Light','Drift','The Quiet Between'],
+      desc:['A serene, unhurried piece creating space to simply exist. Gentle transitions invite the mind to settle.','Like a long exhale, dissolving tension each bar. Warm harmonics wrap around you like something safe.'] },
+    romantic:{ sets:[['C','Em','Am','F','C','G','Am','F'],['F','Am','Dm','C','Bb','F','C','F'],['G','Bm','Em','C','G','D','Am','D']], bpm:84, energy:'medium', valence:'hopeful',
+      mel:[[{note:'E4',beat:0,dur:1},{note:'G4',beat:1,dur:1},{note:'A4',beat:2,dur:2},{note:'G4',beat:4,dur:1},{note:'F4',beat:5,dur:1},{note:'E4',beat:6,dur:2}],[{note:'B4',beat:0,dur:2},{note:'A4',beat:2,dur:1},{note:'G4',beat:3,dur:1},{note:'A4',beat:4,dur:2},{note:'G4',beat:6,dur:2}]],
+      titles:['Warmth in Your Orbit','Tender Hours','Something Unspoken','Close Enough to Feel','Soft Landing'],
+      desc:['Intimate and gentle, capturing the quiet electricity of closeness. The melody leans in like a whispered confession.','Warm and unhurried, holding space for tenderness. Each note lingers like a hand not quite letting go.'] },
+    energetic:{ sets:[['G','D','Em','C','G','D','C','G'],['A','E','D','A','E','D','E','A'],['C','G','F','G','C','Am','F','G']], bpm:132, energy:'high', valence:'joyful',
+      mel:[[{note:'G4',beat:0,dur:0.25},{note:'A4',beat:0.25,dur:0.25},{note:'B4',beat:0.5,dur:0.5},{note:'D5',beat:1,dur:0.5},{note:'B4',beat:1.5,dur:0.5},{note:'A4',beat:2,dur:0.5},{note:'G4',beat:2.5,dur:0.5},{note:'D4',beat:3,dur:1},{note:'G4',beat:4,dur:2}]],
+      titles:['Full Send','Velocity','Unstoppable Force','Zero to Everything','Redline'],
+      desc:['Pure kinetic energy in audio form. This does not build up, it starts at full power and dares you to keep up.','Built for momentum. Every element pushes forward, the rhythm relentless, the melody sharp.'] },
+    nostalgic:{ sets:[['C','Am','F','G','C','Am','Dm','G'],['G','Em','Am','D','G','C','D','G'],['F','Dm','Bb','C','F','Dm','Gm','C']], bpm:78, energy:'low', valence:'bittersweet',
+      mel:[[{note:'E4',beat:0,dur:1},{note:'D4',beat:1,dur:1},{note:'C4',beat:2,dur:2},{note:'D4',beat:4,dur:1},{note:'E4',beat:5,dur:1},{note:'G4',beat:6,dur:2},{note:'E4',beat:8,dur:4}]],
+      titles:['Summer We Cannot Return To','Old Photographs','The Long Way Home','When Time Was Slower','Back Then'],
+      desc:['Warm and aching, like flipping through old photographs. The melody carries the sweetness of something that cannot come back.','A golden haze, familiar chord shapes drifting through gentle tempos, the way a good memory replays unbidden.'] },
+    dark:{ sets:[['Am','Dm','Gm','Am','F','E','Am','E'],['Em','Am','B','Em','C','D','B','Em'],['Cm','Fm','Bb','Cm','Ab','G','Cm','G']], bpm:62, energy:'low', valence:'dark',
+      mel:[[{note:'A3',beat:0,dur:2},{note:'G3',beat:2,dur:1},{note:'F3',beat:3,dur:1},{note:'E3',beat:4,dur:4},{note:'A3',beat:8,dur:4}],[{note:'E4',beat:0,dur:3},{note:'D4',beat:3,dur:1},{note:'C4',beat:4,dur:2},{note:'B3',beat:6,dur:2}]],
+      titles:['Into the Void','Hollow Hours','The Weight of Nothing','Numb','Descent'],
+      desc:['Sparse and heavy, leaning into silence rather than filling it. Dark harmonics mirror carrying something too heavy to name.','An introspective descent into shadow. Minor tonalities and deliberate pacing, the inside of a very quiet moment.'] },
+    hopeful:{ sets:[['C','G','Am','F','C','G','F','C'],['F','C','G','Am','F','C','Dm','G'],['G','D','Em','C','G','D','Am','C']], bpm:92, energy:'medium', valence:'hopeful',
+      mel:[[{note:'C4',beat:0,dur:1},{note:'E4',beat:1,dur:1},{note:'G4',beat:2,dur:1},{note:'A4',beat:3,dur:1},{note:'G4',beat:4,dur:1},{note:'E4',beat:5,dur:1},{note:'F4',beat:6,dur:2},{note:'G4',beat:8,dur:4}],[{note:'G4',beat:0,dur:2},{note:'A4',beat:2,dur:1},{note:'B4',beat:3,dur:1},{note:'C5',beat:4,dur:4}]],
+      titles:['Something Better Coming','First Light','The Turn','Almost There','On the Edge of New'],
+      desc:['Quietly optimistic, the moment before something good happens. The melody climbs steadily toward something you can almost see.','A warmth that does not shout but persists. Like hope, it keeps moving forward even when the path is not fully clear.'] }
+  };
+
+  const p = P[dom] || P.calm;
+  const pick = a => a[Math.floor(Math.random()*a.length)];
+  const tm = { slow:0.72, medium:1.0, fast:1.35 };
+  const bpm = Math.round(p.bpm * (tm[tempo]||1));
+  const keys = { 'lo-fi':'C major','cinematic':'D minor','electronic':'A minor','jazz':'F major','ambient':'G major','indie pop':'E major','classical':'C major' };
+  return { title:pick(p.titles), chords:pick(p.sets), bpm, key:keys[genre]||'C major', melody:pick(p.mel), energy:p.energy, valence:p.valence, description:pick(p.desc) };
 }
 
 function applyTrack(result) {
